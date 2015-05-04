@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <title>KIJ-CA</title>
+</head>
+<body>
+
+<div class="default-page">
+              <div class="col-md-4">
+              </div>
+              <div class="col-md-5">
+                <!-- START PANEL -->
+                <h1></h1>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <div class="panel-title">
+                      Fill your Identity
+                    </div>
+                  </div>
+                  <div class="panel-body">                   
+                    <form class="" role="form" method="POST" action="/register">
+
+                      <div class="form-group form-group-default required">
+                        <label>Organization Name</label>
+                        <input name="organization"type="text" class="form-control" placeholder="ex: Institut Teknologi Sepuluh Nopember" required>
+                      </div>
+
+                      <div class="form-group form-group-default required">
+                        <label>Organizational Unit</label>
+                        <input name="organizationalunit"type="text" class="form-control" placeholder="ex: LPTSI" required>
+                      </div>
+
+                      <div class="form-group form-group-default required">
+                        <label>Country (2 letter code)</label>
+                        <input name="country"type="text" class="form-control" placeholder="ex: ID for Indonesia" required>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="form-group form-group-default required">
+                            <label>State or Privince</label>
+                            <input name="state" type="text" class="form-control" placeholder="ex: Jawa Timur" required>
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="form-group form-group-default">
+                            <label>Locality or City</label>
+                            <input name="locality" type="text" class="form-control" placeholder="ex: Surabaya" required>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group form-group-default required">
+                        <label>Common Name (hostname)</label>
+                        <input name="cn"type="text" class="form-control" placeholder="ex: example.com" required>
+                      </div>
+
+                      <div class="form-group form-group-default required ">
+                        <label>Email Address</label>
+                        <input type="email" name="email" class="form-control" placeholder="ex: some@example.com" required>
+                      </div>
+
+                      <div class="form-group form-group-default required">
+                        <label>Public Key</label>
+                        <input name="publickey"type="file" class="form-control" placeholder="ex: example.com" required>
+                      </div>
+
+                      <button class="btn btn-complete btn-cons col-md-12" height="50px">Request Certificate</button>
+                    </form>
+                  </div>
+                </div>
+</div>
+
+</body>
