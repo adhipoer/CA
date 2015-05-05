@@ -1,3 +1,0 @@
-# CA
-Tugas CA
-KIJ 2015
