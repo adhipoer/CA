@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 03, 2015 at 09:22 AM
+-- Generation Time: May 06, 2015 at 04:12 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -36,6 +36,29 @@ CREATE TABLE IF NOT EXISTS `request` (
   `email` text NOT NULL,
   `publickey` longblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE IF NOT EXISTS `user` (
+  `user_organization` text NOT NULL,
+  `user_country` text NOT NULL,
+  `user_state` text NOT NULL,
+  `user_locality` text NOT NULL,
+  `user_email` text NOT NULL,
+  `user_password` text NOT NULL,
+  `user_salt` longblob NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`user_organization`, `user_country`, `user_state`, `user_locality`, `user_email`, `user_password`, `user_salt`) VALUES
+('its', 'Indonesia', 'sumatra selatan', 'palembang', 'izdiharfarahdina@gmail.com', 'd722dc55428465fe285a6e4b94adaaf8e9fb90a1a7738c72686a9df6a71f4302', 0x33636138383463323631633565333135);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
