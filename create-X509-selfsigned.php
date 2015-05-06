@@ -69,13 +69,13 @@ $pubKey->setPublicKey();
 
 $subject = new File_X509();
 
-$subject->setDNProp('id-at-organizationName', 'ITS');
-$subject->setDNProp('id-at-organizationalUnitName', 'LPTSI');
+$subject->setDNProp('id-at-organizationName', 'SPUFF-CA');
+$subject->setDNProp('id-at-organizationalUnitName', 'IT');
 $subject->setDNProp('id-at-countryName', 'ID');
 $subject->setDNProp('id-at-stateOrProvinceName', 'East Java');
 $subject->setDNProp('id-at-localityName', 'Surabaya');
-$subject->setDNProp('id-at-commonName', 'its.ac.id');
-$subject->setDNProp('id-emailAddress', 'example@its.ac.id');
+$subject->setDNProp('id-at-commonName', 'spuff.net');
+$subject->setDNProp('id-emailAddress', 'mail@spuff.net');
 
 $subject->setPublicKey($pubKey);
 
@@ -85,12 +85,16 @@ $issuer->setDN($subject->getDN());
 
 $x509 = new File_X509();
 
-$x509->setSerialNumber(50);
+$x509->setSerialNumber(1);
 
 $result = $x509->sign($issuer, $subject);
 //echo "the stunnel.pem contents are as follows:\r\n\r\n";
 echo $privKey->getPrivateKey();
 echo "\r\n";
+
+echo $pubKey->getPublicKey();
+echo "\r\n";
+
 //echo $x509->saveX509($result);
 //echo "\r\n";
 ?>
