@@ -1,11 +1,17 @@
 <?php
-if(isset($_POST['certificate']))
- {
-   header('Content-disposition: attachment; filename=test.cer');
-   header('Content-type: application/txt');
-   echo $_POST['certificate'];
-   exit; //stop writing
- }
+    require("config.php");
+    if(empty($_SESSION['email'])) 
+    {
+        header("Location: index.php");
+        die("Redirecting to index.php"); 
+    }
+    if(isset($_POST['certificate']))
+    {
+        header('Content-disposition: attachment; filename=test.cer');
+        header('Content-type: application/txt');
+        echo $_POST['certificate'];
+        exit; //stop writing
+    }
 ?>
 
 <!DOCTYPE html>
@@ -35,30 +41,15 @@ if(isset($_POST['certificate']))
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-        <li><a href="#">Link</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>
+            <li><a href="create-csr.php">CSR <span class="sr-only"></span></a></li>
+			<li><a href="#">CA SIGN</a></li>
+			<li class="active"><a href="create-x509-CAsigned.php">Self Sign<span class="sr-only">(current)</span></a></li>
+			<li><a href="#">Revoke</a></li>
       </ul>
-      <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
-      </ul>
+		    <li><a href="user_dashboard.php"> Hello, <?php echo htmlentities($_SESSION['email']['user_organization'], ENT_QUOTES, 'UTF-8'); ?></a></li>
+            <li><a href="logout.php">Logout</a></li>
+        </ul>
     </div>
   </div>
 </nav>
