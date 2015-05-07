@@ -184,7 +184,7 @@
                         <textarea class="form-control" rows="5" id="publickey" name="publickey" required>
                         </textarea>
                       </div>
-                      <button class="btn btn-complete btn-cons col-md-12" height="50px">Self Sign Certificate</button>
+                      <button class="btn btn-complete btn-cons col-md-12" height="50px">CA Sign Certificate</button>
                     </form>
                   </div>
                 </div>
