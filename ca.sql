@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 06, 2015 at 06:07 PM
+-- Generation Time: May 07, 2015 at 02:01 AM
 -- Server version: 5.6.21
--- PHP Version: 5.6.3
+-- PHP Version: 5.5.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -30,10 +30,18 @@ CREATE TABLE IF NOT EXISTS `request` (
 `request_id` int(11) NOT NULL,
   `request_ou` text NOT NULL,
   `request_cm` text NOT NULL,
-  `request_serial` text NOT NULL,
-  `request_csr` varchar(2000) NOT NULL,
+  `request_serial` text,
+  `request_csr` varchar(2000) DEFAULT NULL,
   `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `request`
+--
+
+INSERT INTO `request` (`request_id`, `request_ou`, `request_cm`, `request_serial`, `request_csr`, `user_id`) VALUES
+(1, 'LPTSI', 'lptsi.its.ac.id', NULL, NULL, 4),
+(2, 'Informatics', 'if.its.ac.id', NULL, NULL, 4);
 
 -- --------------------------------------------------------
 
@@ -46,7 +54,14 @@ CREATE TABLE IF NOT EXISTS `root` (
   `private_key` varchar(2000) NOT NULL,
   `ca_root` varchar(2000) NOT NULL,
   `public_key` varchar(2000) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `root`
+--
+
+INSERT INTO `root` (`id_root`, `private_key`, `ca_root`, `public_key`) VALUES
+(1, '-----BEGIN RSA PRIVATE KEY----- \r\nMIICXQIBAAKBgQC7mMZThCsFDCqsmGFEBP01yTiOgAkAylqf+7tRSKLBzP1IqR4V vsCSL3k8inyCYxHzjhtVwBoLrLSm9xpdsu6Akwvr4zJs1PVIKxZHIQTi0CCMwwSS wg8eja25kldQBtX2voxhAChRVlScXWebLv96lcOzxdMIj2nHUwByUJIzIQIDAQAB AoGAc54RxVE0zlSUTHFRqQFGKYsNj027vr/4IJed99fDb5vuEoUgZJh+yNn3Z2eW mymB29CeajgOFVnosOqkVlE8CfR5Pl3swB9LBSSJ064VdqxfE7eOZs7e4qS11zsK So79UwJ4s9/0+nAzeELU/UWaFJmYJC8sXC2Wnah7HriIVVECQQDzY59ANLz1K4Z5 ibWPhV5WIgfR11KfB7SIJzMUVmxLJ8BPN1tWmHKed7dU+ANLmQhwYaA8Jrkj7LfT Mi0zNWZ9AkEAxVEbnf7vcCr6vr6+3E++Kp48zGcVOF8Ar5J6sqZ62w+Ywh8aJ8j8 Z4w4mSHEjhm8OIgwOmZSxEXuP845bfaMdQJBAIFPRXW0T0wmssxxyJ+W6Rbz/5mS P9g0HMtVoELG48ROO1MbAxEP752X1zRyjDWm+Z/TjnFG1YhrpQK1HuSdE3UCQQCg i9n4uBGCJrZWtUT+ZTPJ4W5+sfEmKMaaFIkZCzQzQYF9kWjqrjIQ3pq+nicbp/zp 0oXLPq5hXLT53YYE3vJxAkA2wnuVsHAIKTR6y5FS4XDGqBcb9zxr1afN6MRdS/bW fbeOi5z7CKHjxfJhBOgWtLGAtuQ2rifuBf3WdAdduK6k -----END RSA PRIVATE KEY-----', '-----BEGIN CERTIFICATE-----MIICfjCCAemgAwIBAgIBMTALBgkqhkiG9w0BAQUwgYcxETAPBgNVBAoMCFNQVUZGLUNBMQswCQYDVQQLDAJJVDELMAkGA1UEBgwCSUQxEjAQBgNVBAgMCUVhc3QgSmF2YTERMA8GA1UEBwwIU3VyYWJheWExEjAQBgNVBAMMCXNwdWZmLm5ldDEdMBsGCSqGSIb3DQEJAQwObWFpbEBzcHVmZi5uZXQwHhcNMTUwNTA2MTc1MzA3WhcNMTYwNTA2MTc1MzA3WjCBhzERMA8GA1UECgwIU1BVRkYtQ0ExCzAJBgNVBAsMAklUMQswCQYDVQQGDAJJRDESMBAGA1UECAwJRWFzdCBKYXZhMREwDwYDVQQHDAhTdXJhYmF5YTESMBAGA1UEAwwJc3B1ZmYubmV0MR0wGwYJKoZIhvcNAQkBDA5tYWlsQHNwdWZmLm5ldDCBnTALBgkqhkiG9w0BAQEDgY0AMIGJAoGBALuYxlOEKwUMKqyYYUQE/TXJOI6ACQDKWp/7u1FIosHM/UipHhW+wJIveTyKfIJjEfOOG1XAGgustKb3Gl2y7oCTC+vjMmzU9UgrFkchBOLQIIzDBJLCDx6NrbmSV1AG1fa+jGEAKFFWVJxdZ5su/3qVw7PF0wiPacdTAHJQkjMhAgMBAAEwCwYJKoZIhvcNAQEFA4GBAB+wc9vsLkId9OdWlmM5D1QvYgxl0FP5Tuzp26g3x/TUTwWPOmiw8XcfEGcFTnUDphml/A3bgnxPWU0bNADs44X6tkUGmC/CY6e5rOqGhCiAwWtRZMyajjP9yS7AvYIx0Dk98Jdd71h712xld+/TeH28Y9PiA9mHPTytQkeE4a3S-----END CERTIFICATE-----', '-----BEGIN PUBLIC KEY----- MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7mMZThCsFDCqsmGFEBP01yTiO gAkAylqf+7tRSKLBzP1IqR4VvsCSL3k8inyCYxHzjhtVwBoLrLSm9xpdsu6Akwvr 4zJs1PVIKxZHIQTi0CCMwwSSwg8eja25kldQBtX2voxhAChRVlScXWebLv96lcOz xdMIj2nHUwByUJIzIQIDAQAB -----END PUBLIC KEY-----');
 
 -- --------------------------------------------------------
 
@@ -103,12 +118,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `request`
 --
 ALTER TABLE `request`
-MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `root`
 --
 ALTER TABLE `root`
-MODIFY `id_root` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id_root` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `user`
 --

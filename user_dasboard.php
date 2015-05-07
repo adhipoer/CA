@@ -28,15 +28,15 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.php">KIJ-CA</a>
+      <a class="navbar-brand">KIJ-CA</a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-            <li class="active"><a href="create-csr.php">CSR <span class="sr-only"></span></a></li>
-			<li><a href="#">CA SIGN</a></li>
-			<li><a href="create-x509-CAsigned.php">Self Sign</a></li>
-			<li><a href="#">Revoke</a></li>
+            <li><a href="create-csr.php">CSR</a></li>
+			      <li><a href="create-X509-CAsigned.php">CA SIGN</a></li>
+			      <li><a href="create-x509-CAsigned.php">Self Sign</a></li>
+			      <li><a href="#">Revoke</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
 		    <li><a> Hello, <?php echo htmlentities($_SESSION['email']['user_organization'], ENT_QUOTES, 'UTF-8'); ?></a></li>

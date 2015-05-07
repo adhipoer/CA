@@ -41,10 +41,10 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-            <li><a href="create-csr.php">CSR <span class="sr-only"></span></a></li>
-			<li><a href="#">CA SIGN</a></li>
-			<li class="active"><a href="create-x509-CAsigned.php">Self Sign<span class="sr-only">(current)</span></a></li>
-			<li><a href="#">Revoke</a></li>
+            <li><a href="create-csr.php">CSR</a></li>
+            <li><a href="create-X509-CAsigned.php">CA SIGN</a></li>
+            <li><a href="create-X509-selfsigned.php">Self Sign</a></li>
+            <li><a href="#">Revoke</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
 		    <li><a href="user_dashboard.php"> Hello, <?php echo htmlentities($_SESSION['email']['user_organization'], ENT_QUOTES, 'UTF-8'); ?></a></li>
@@ -62,20 +62,22 @@ include('Crypt/RSA.php');
 $privKey = new Crypt_RSA();
 extract($privKey->createKey());
 $privKey->loadKey($privatekey);
-
+echo $privKey;
+echo "\n\n";
 $pubKey = new Crypt_RSA();
 $pubKey->loadKey($publickey);
 $pubKey->setPublicKey();
+echo $pubKey;
 
 $subject = new File_X509();
 
-$subject->setDNProp('id-at-organizationName', 'SPUFF-CA');
-$subject->setDNProp('id-at-organizationalUnitName', 'IT');
+$subject->setDNProp('id-at-organizationName', 'ITS');
+$subject->setDNProp('id-at-organizationalUnitName', 'LPTSI');
 $subject->setDNProp('id-at-countryName', 'ID');
 $subject->setDNProp('id-at-stateOrProvinceName', 'East Java');
 $subject->setDNProp('id-at-localityName', 'Surabaya');
-$subject->setDNProp('id-at-commonName', 'spuff.net');
-$subject->setDNProp('id-emailAddress', 'mail@spuff.net');
+$subject->setDNProp('id-at-commonName', 'its.ac.id');
+$subject->setDNProp('id-emailAddress', 'example@its.ac.id');
 
 $subject->setPublicKey($pubKey);
 
@@ -85,16 +87,12 @@ $issuer->setDN($subject->getDN());
 
 $x509 = new File_X509();
 
-$x509->setSerialNumber(1);
+$x509->setSerialNumber(50);
 
 $result = $x509->sign($issuer, $subject);
 //echo "the stunnel.pem contents are as follows:\r\n\r\n";
 echo $privKey->getPrivateKey();
 echo "\r\n";
-
-echo $pubKey->getPublicKey();
-echo "\r\n";
-
 //echo $x509->saveX509($result);
 //echo "\r\n";
 ?>

@@ -6,6 +6,9 @@
             SELECT 
                 user_id,
                 user_organization,
+                user_country,
+                user_state,
+                user_locality,
                 user_email,  
                 user_password, 
                 user_salt  
@@ -70,7 +73,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.php">KIJ-CA</a>
+      <a class="navbar-brand">KIJ-CA</a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
