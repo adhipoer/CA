@@ -26,21 +26,27 @@
 	$ca->loadX509($pemca);
 	$ca->setPrivateKey($cakey);
 
-	// Build the (empty) certificate revocation list.
+	// Load the CRL.
 	$crl = new File_X509();
-	$crl->loadCRL($crl->saveCRL($crl->signCRL($ca, $crl)));
+	$crl->loadCA($pemca); // For later signature check.
+	$pemcrl = file_get_contents('mycrl.crl');
+	$crl->loadCRL($pemcrl);
 
-	// Revoke a certificate.
-	$crl->setRevokedCertificateExtension('12', 'id-ce-cRLReasons', 'privilegeWithdrawn');
+	// Validate the CRL.
+	if ($crl->validateSignature() !== 1) {
+	    exit("CRL signature is invalid\n");
+	}
 
-	// Sign the CRL.
-	$crl->setSerialNumber(1, 10);
+	// Update the revocation list.
+	$crl->setRevokedCertificateExtension('5522', 'id-ce-cRLReasons', 'privilegeWithdrawn');
+
+	// Generate the new CRL.
 	$crl->setEndDate('+3 months');
 	$newcrl = $crl->signCRL($ca, $crl);
 
 	// Output it.
 	$fileRoot = $crl->saveCRL($newcrl);
 	$myfileroot = fopen("mycrl.crl","w") or die("Unable to open file!");
-	fwrite($myfileroot, $fileRoot);
-	fclose($myfileroot);
+	fwrite($myRoot, $fileRoot);
+	fclose($myRoot);
 ?>

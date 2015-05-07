@@ -42,7 +42,7 @@
 				echo $x509->saveX509($result);
 				echo "\r\n";
 				
-				$filename = $_POST['cn']."-selfsigned.pem";
+				$filename = $_POST['cn']."-selfsigned.cer";
 				header("Cache-Control: public");
 				header("Content-Description: File Transfer");
 				header("Content-Length: ".strlen($x509->saveX509($result)));

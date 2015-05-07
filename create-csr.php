@@ -69,7 +69,7 @@
     header("Content-Description: File Transfer");
     header("Content-Length: ".strlen($x509->saveCSR($csr)));
     header("Content-Disposition: attachment; filename=$filename");
-    header("Content-Type: application/octet-stream; "); 
+    header("Content-Type: text/plain"); 
     header("Content-Transfer-Encoding: binary");
     echo $x509->saveCSR($csr);
     exit();

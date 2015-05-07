@@ -39,7 +39,6 @@
       if($reqCa)
       {
         if($reqCa['request_serial']!=NULL){
-          alert("CA anda sudah ditanda tangani");
         }
         else{
           $query3 = " 
@@ -78,6 +77,14 @@
         $x509->setSerialNumber(chr($serialNum));
         $x509->makeCA();
         $result = $x509->sign($issuer, $subject);
+        $filename = $_POST['cn']."-ca.cer";
+        header("Cache-Control: public");
+        header("Content-Description: File Transfer");
+        header("Content-Length: ".strlen($x509->saveX509($result)));
+        header("Content-Disposition: attachment; filename=$filename");
+        header("Content-Type: text/plain"); 
+        header("Content-Transfer-Encoding: binary");
+        echo $x509->saveX509($result);
         $query2 = " 
                 UPDATE 
                   request 
@@ -99,16 +106,7 @@
           } 
           catch(PDOException $ex){ die("Failed to run query2: " . $ex->getMessage()); }
 
-        $filename = $_POST['cn']."-ca.pem";
-
-          header("Cache-Control: public");
-          header("Content-Description: File Transfer");
-          header("Content-Length: ".strlen($x509->saveX509($result)));
-          header("Content-Disposition: attachment; filename=$filename");
-          header("Content-Type: application/octet-stream; "); 
-          header("Content-Transfer-Encoding: binary");
-          echo $x509->saveX509($result);
-          exit();
+        exit();
       	}
       }
   }
