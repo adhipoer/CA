@@ -1,66 +1,120 @@
 <?php
-	require("config.php");
-	include('File/X509.php');
-	include('Crypt/RSA.php');
+  require("config.php");
+  include('File/X509.php');
+  include('Crypt/RSA.php');
 
-	if(empty($_SESSION['email'])) 
-  	{
+  if(empty($_SESSION['email'])) 
+    {
         header("Location: index.php");
         die("Redirecting to index.php"); 
-  	}
-  	if(!empty($_POST)){
-  		if(empty($_POST['cn'])) 
-    	{ die("Please enter a common name/hostname."); }
-		$query = " 
-	            SELECT 
-	                private_key,
-	                public_key,
-	                ca_root
-	            FROM root  
-	        ";
-		try{ 
-	        $stmt = $db->prepare($query); 
-	        $result = $stmt->execute(); 
-	    } 
-	    catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); }
-	    $row = $stmt->fetch();
-	    
-		$CAPrivKey = new Crypt_RSA();
-		$CAPrivKey->loadKey($row['private_key']);
+    }
+    
+    if(!empty($_POST)){
+      if(empty($_POST['cn'])) 
+      { die("Please enter a common name/hostname."); }
+      if(empty($_POST['csr'])) 
+      { die("Please enter a csr."); }
+      if(empty($_POST['publickey'])) 
+      { die("Please enter a publickey."); }
+      $query = " 
+              SELECT 
+                  request_id,
+                  request_cm,
+                  user_id,
+                  request_serial
+              FROM request
+              WHERE 
+          request_cm = :cn 
+          "; 
+      $query_params = array( 
+        ':cn' => $_POST['cn'] 
+      ); 
+      try{ 
+          $stmt = $db->prepare($query); 
+          $result = $stmt->execute($query_params); 
+      } 
+      catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); } 
+      $reqCa = $stmt->fetch();
 
-		$userPubKey = $_POST['publickey'];
-		$pubKey = new Crypt_RSA();
-		$pubKey->loadKey($userPubKey);
-		$pubKey->setPublicKey();
+      if($reqCa)
+      {
+        if($reqCa['request_serial']!=NULL){
+          alert("CA anda sudah ditanda tangani");
+        }
+        else{
+          $query3 = " 
+                  SELECT 
+                      private_key,
+                      public_key,
+                      ca_root
+                  FROM root  
+              ";
+        try{ 
+              $stmt = $db->prepare($query3); 
+              $result = $stmt->execute(); 
+          } 
+          catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); }
+          $row = $stmt->fetch();
+          
+        $CAPrivKey = new Crypt_RSA();
+        $CAPrivKey->loadKey($row['private_key']);
 
-		
-		$userCSR = $_POST['csr'];
-		$subject = new File_X509();
-		$subject->loadCSR($userCSR);
-		$subject->setPublicKey($pubKey);
+        $userPubKey = $_POST['publickey'];
+        $pubKey = new Crypt_RSA();
+        $pubKey->loadKey($userPubKey);
+        $pubKey->setPublicKey();
+        
+        $userCSR = $_POST['csr'];
+        $subject = new File_X509();
+        $subject->loadCSR($userCSR);
+        $subject->setPublicKey($pubKey);
+        
+        $issuer = new File_X509();
+        $issuer->setPrivateKey($CAPrivKey);
+        $ca = $issuer->loadX509($row['ca_root']);
+        
+        $serialNum = $reqCa['user_id'].$reqCa['request_id'];
+        $x509 = new File_X509();
+        $x509->setSerialNumber(chr($serialNum));
+        $x509->makeCA();
+        $result = $x509->sign($issuer, $subject);
+        $query2 = " 
+                UPDATE 
+                  request 
+                set 
+                  request_serial = :request_serial,
+                  ca = :ca
+                WHERE
+                  request_cm = :cn
 
-		$issuer = new File_X509();
-		$issuer->setPrivateKey($CAPrivKey);
-		$ca = $issuer->loadX509($row['ca_root']);
-		
-		$x509 = new File_X509();
-		$x509->setSerialNumber(chr(1));
-		$x509->makeCA();
+            ";
+          $query_params2 = array(
+                ':request_serial' => $serialNum,
+                ':ca' => $x509->saveX509($result),
+                ':cn' => $_POST['cn']
+            ); 
+          try {  
+            $stmt = $db->prepare($query2); 
+              $result = $stmt->execute($query_params2); 
+          } 
+          catch(PDOException $ex){ die("Failed to run query2: " . $ex->getMessage()); }
 
-		$result = $x509->sign($issuer, $subject);
-		$filename = $_POST['cn']."-ca.pem";
-	    header("Cache-Control: public");
-	    header("Content-Description: File Transfer");
-	    header("Content-Length: ".strlen($x509->saveX509($result)));
-	    header("Content-Disposition: attachment; filename=$filename");
-	    header("Content-Type: application/octet-stream; "); 
-	    header("Content-Transfer-Encoding: binary");
-	    echo $x509->saveX509($result);
-	    exit();
-	}
-	//echo "the CA cert to be imported into the browser is as follows:\r\n\r\n";
-	//echo $x509->saveX509($result);
-	//echo "\r\n\r\n";
+        $filename = $_POST['cn']."-ca.pem";
+
+          header("Cache-Control: public");
+          header("Content-Description: File Transfer");
+          header("Content-Length: ".strlen($x509->saveX509($result)));
+          header("Content-Disposition: attachment; filename=$filename");
+          header("Content-Type: application/octet-stream; "); 
+          header("Content-Transfer-Encoding: binary");
+          echo $x509->saveX509($result);
+          exit();
+      	}
+      }
+  }
+  //echo "the CA cert to be imported into the browser is as follows:\r\n\r\n";
+  //echo $x509->saveX509($result);
+  //echo "\r\n\r\n";
 ?>
 
 <!DOCTYPE html>
@@ -121,20 +175,16 @@
                         <input name="cn"type="input" class="form-control" placeholder="ex: example.com" required>
                       </div>
                       <div class="form-group form-group-default required" >
-                      	<label>CSR</label>
+                        <label>CSR</label>
                         <textarea class="form-control" rows="5" id="csr" name="csr" required>
                         </textarea>
                       </div>
                       <div class="form-group form-group-default required" >
-                      	<label>Public Key</label>
+                        <label>Public Key</label>
                         <textarea class="form-control" rows="5" id="publickey" name="publickey" required>
                         </textarea>
                       </div>
-                      <!--<div class="form-group form-group-default required">
-                        <label>Public Key</label>
-                        <input name="publickey" type="file" class="form-control" placeholder="ex: example.com" required>
-                      </div>-->
-                      <button class="btn btn-complete btn-cons col-md-12" height="50px">Sign Certificate</button>
+                      <button class="btn btn-complete btn-cons col-md-12" height="50px">Self Sign Certificate</button>
                     </form>
                   </div>
                 </div>

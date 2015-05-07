@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 07, 2015 at 02:01 AM
+-- Generation Time: May 07, 2015 at 04:21 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.5.19
 
@@ -31,17 +31,16 @@ CREATE TABLE IF NOT EXISTS `request` (
   `request_ou` text NOT NULL,
   `request_cm` text NOT NULL,
   `request_serial` text,
-  `request_csr` varchar(2000) DEFAULT NULL,
-  `user_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+  `user_id` int(11) DEFAULT NULL,
+  `ca` varchar(2000) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `request`
 --
 
-INSERT INTO `request` (`request_id`, `request_ou`, `request_cm`, `request_serial`, `request_csr`, `user_id`) VALUES
-(1, 'LPTSI', 'lptsi.its.ac.id', NULL, NULL, 4),
-(2, 'Informatics', 'if.its.ac.id', NULL, NULL, 4);
+INSERT INTO `request` (`request_id`, `request_ou`, `request_cm`, `request_serial`, `user_id`, `ca`) VALUES
+(6, 'lptsi', 'lptsi.its.ac.id', '46', 4, '-----BEGIN CERTIFICATE-----\r\n\r\n-----END CERTIFICATE-----');
 
 -- --------------------------------------------------------
 
@@ -118,7 +117,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `request`
 --
 ALTER TABLE `request`
-MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `root`
 --
